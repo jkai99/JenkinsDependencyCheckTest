@@ -9,9 +9,9 @@ pipeline {
                 git url: 'https://github.com/jkai99/JenkinsDependencyCheckTest.git', branch: 'master', credentialsId: 'jenkins-PAT'
             }
         }
-        stage('OWASP JenkinsDependencyCheckTest') {
+        stage('OWASP OWASP DependencyCheck') {
             steps {
-                dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'owasp'
+                dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'OWASP Dependency-Check Vulnerabilities'
             }
         }
     }
