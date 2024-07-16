@@ -1,20 +1,23 @@
 pipeline {
     agent any
-
     environment {
-        NVD_API_KEY = 'f0041770-b1c8-438a-8a77-583e617fb188'
+        NVD_API_KEY = credentials('nvd-api-key')
     }
-
     stages {
         stage('Checkout SCM') {
             steps {
-                checkout scm
+                git url: 'https://github.com/jkai99/JenkinsDependencyCheckTest.git', branch: 'master', credentialsId: 'jenkins-PAT'
             }
         }
         stage('OWASP DependencyCheck') {
             steps {
-                dependencyCheck additionalArguments: "--nvdApiKey ${env.NVD_API_KEY}"
+                dependencyCheck additionalArguments: '--format HTML --format XML', odcInstallation: 'owasp'
             }
+        }
+    }
+    post {
+        success {
+            dependencyCheckPublisher pattern: 'dependency-check-report.xml'
         }
     }
 }
